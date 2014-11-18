@@ -11,11 +11,14 @@ angular.module('bongApp')
     return {
       template: '<div></div>',
       restrict: 'C',
-      link: function postLink(scope, element) {
-
+      transclude: true,
+      link: function postLink(scope, element, attrs) {
+        
         var animate = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame || function (callback) {
           $window.setTimeout(callback, 1000 / 60);
         };
+        var computerPoints = 0;
+        var playerPoints = 0;
         var canvas = element[0];
         var width = 400;
         var height = 600;
@@ -120,6 +123,7 @@ angular.module('bongApp')
         };
 
         function Ball(x, y) {
+          
           this.x = x;
           this.y = y;
           this.xSpeed = 0;
@@ -132,6 +136,8 @@ angular.module('bongApp')
           context.fillStyle = '#000000';
           context.fill();
         };
+        
+       
 
         Ball.prototype.update = function (paddle1, paddle2) {
           this.x += this.xSpeed;
@@ -148,8 +154,19 @@ angular.module('bongApp')
             this.x = 395;
             this.xSpeed = -this.xSpeed;
           }
-
+          
           if (this.y < 0 || this.y > 600) {
+            console.log(this.y);
+           scope.computer = 'testing';
+            if(this.y > 600)
+              {
+                //console.log("i am here");
+                this.computer =  1;
+               }
+             if (this.y < 0)
+               {
+                scope.player = playerPoints + 1;
+               }
             this.xSpeed = 0;
             this.ySpeed = 3;
             this.x = 200;
