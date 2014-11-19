@@ -164,7 +164,7 @@ angular.module('bongApp')
             if (this.y < 0) {
               scope.player++;
             }
-            scope.$apply();
+            scope.$digest();
             this.xSpeed = 0;
             this.ySpeed = 3;
             this.x = 200;
