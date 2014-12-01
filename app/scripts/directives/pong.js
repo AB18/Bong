@@ -24,6 +24,7 @@ angular.module('bongApp')
         var player = new Player();
         var computer = new Computer();
         var ball = new Ball(200, 300);
+        var winningPoint = 2;
 
         var keysDown = {};
 
@@ -44,9 +45,11 @@ angular.module('bongApp')
         var step = function () {
           update();
           render();
-          animate(step);
+          if(scope.computer != winningPoint && scope.player!= winningPoint){
+             animate(step);
+          }
         };
-
+        
         scope.computer = 0;
         scope.player = 0;
 
@@ -157,13 +160,22 @@ angular.module('bongApp')
           }
 
           if (this.y < 0 || this.y > 600) {
-            console.log(this.y);
-            if(this.y > 600) {
+           
+            if(this.y > 600 && scope.computer != winningPoint) {
               scope.computer++;
             }
-            if (this.y < 0) {
+            if (this.y < 0 && scope.player != winningPoint) {
               scope.player++;
             }
+            if(scope.computer == winningPoint){
+              scope.alertMessage = "Congratulations Computer! You have won!!";
+              
+            }
+            else if(scope.player == winningPoint ){
+              scope.alertMessage = "Congratulations Player! You have won!!";
+             
+            }
+
             scope.$digest();
             this.xSpeed = 0;
             this.ySpeed = 3;
@@ -172,13 +184,13 @@ angular.module('bongApp')
           }
 
           if (topY > 300) {
-            if (topY < (paddle1.y + paddle1.height) && bottomY > paddle1.y && topX < (paddle1.x + paddle1.width) && bottomX > paddle1.x) {
+            if (topY < (paddle1.y + paddle1.height) && bottomY > paddle1.y && topX < (paddle1.x + paddle1.width) && bottomX > paddle1.x)             {
               this.ySpeed = -3;
               this.xSpeed += (paddle1.xSpeed / 2);
               this.y += this.ySpeed;
             }
           } else {
-            if (topY < (paddle2.y + paddle2.height) && bottomY > paddle2.y && topX < (paddle2.x + paddle2.width) && bottomX > paddle2.x) {
+            if (topY < (paddle2.y + paddle2.height) && bottomY > paddle2.y && topX < (paddle2.x + paddle2.width) && bottomX > paddle2.x)             {
               this.ySpeed = 3;
               this.xSpeed += (paddle2.xSpeed / 2);
               this.y += this.ySpeed;
